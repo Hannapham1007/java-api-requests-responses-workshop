@@ -1,0 +1,141 @@
+openapi: 3.1.0
+info:
+  title: Java API Requests and Responses Workshop - Core Criteria
+  description: Core API for the Requests and Responses workshop with no errors in this file
+  version: 0.0.4
+  contact:
+    name: Responses and Requests
+
+servers:
+  - url: http://localhost:4000
+tags:
+  - name: publisher
+paths:
+  /publisher:
+    post:
+      tags:
+        - publisher
+      operationId: publisherId
+      summary: Route to use (with a payload) when creating a new publisher
+      description: New publisher creation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePublisher'
+      responses:
+        '201':
+          description: Publisher created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Publisher'
+    get:
+      tags:
+        - publisher
+      summary: Plain GET to access the whole list
+      description: Get all of the listed publisher
+      operationId: getPublisher
+      responses:
+        '200':
+          description: Get all publisher
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllPublisher'
+  /publisher/{id}:
+    get:
+      parameters:
+        - name: id
+          in: path
+          description: Id of the publisher
+          required: true
+          schema:
+            type: integer
+      tags:
+        - publisher
+      summary: Get a specific publisher using their ID
+      description: Get one publisher from the list
+      operationId: getSpecificPublisher
+      responses:
+        '200':
+          description: Get a single publisher
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Publisher'
+
+    put:
+      tags:
+        - publisher
+      summary: Update an existing publisher
+      description: use the ID of an publisher to update them using the payload
+      operationId: updatePublisher
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the publisher to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePublisher'
+      responses:
+        '201':
+          description: Publisher successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+    delete:
+      tags:
+        - publisher
+      summary: Delete a publisher using the ID
+      description: Delete a publisher using their ID
+      operationId: deletePublisher
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the publisher to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the Publisher
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Publisher'
+
+components:
+  schemas:
+    CreatePublisher:
+      type: object
+      required: [name, city]
+      properties:
+        name:
+          type: string
+          example: "Hanna"
+        email:
+          type: string
+          example: "Gothenburg"
+    Publisher:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Hanna"
+        city:
+          type: string
+          example: "Gothenburg"
+    AllPublisher:
+      type: array
+      items:
+        $ref: '#/components/schemas/Publisher'
